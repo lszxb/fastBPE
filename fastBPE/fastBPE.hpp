@@ -45,7 +45,7 @@ void readText(const char *fp, unordered_map<string, uint32_t> &word_count) {
   string cur_word;
   uint64_t total = 0;
   auto deal_with_char = [&](char cur_char){
-    if (cur_char == ' ' || cur_char == '\n') {
+    if (cur_char == ' ' || cur_char == '\n' || cur_char == '\r') {
       if (cur_word.size() == 0)
         return;
       // end of word
@@ -453,7 +453,7 @@ void readCodes(const char *fp, unordered_map<tps, uint32_t, pair_hash> &codes,
     if (line[0] == '#') continue;
     vector<string> splits;
     split(splits, line, ' ');
-    assert(splits.size() == 2);
+    assert(splits.size() >= 2);
     auto pair = make_pair(splits[0], splits[1]);
     string concat = splits[0] + splits[1];
     assert(codes.find(pair) == codes.end());

@@ -19,7 +19,7 @@ cython
 
 Compile with:
 ```
-g++ -std=c++11 -pthread -O3 fastBPE/main.cc -IfastBPE -o fast -L<path to mman lib> -lmman -I<path to mman include>
+g++ -std=c++11 -pthread -O3 fastBPE/main.cc -IfastBPE -o fast -lmman -L<path to mman lib> -I<path to mman include>
 ```
 
 ## Usage:
