@@ -3,11 +3,23 @@
 
 C++ implementation of [Neural Machine Translation of Rare Words with Subword Units](https://arxiv.org/abs/1508.07909), with Python API.
 
-## Installation
+This is a fork of the original fastBPE, trying to build on Windows.
+
+## Installation (Windows)
+
+Environment:
+
+Windows 10
+
+gcc or clang from mingw-w64 or msys2
+
+[mman-win32](https://github.com/alitrack/mman-win32)
+
+cython
 
 Compile with:
 ```
-g++ -std=c++11 -pthread -O3 fastBPE/main.cc -IfastBPE -o fast
+g++ -std=c++11 -pthread -O3 fastBPE/main.cc -IfastBPE -o fast -L<path to mman lib> -lmman -I<path to mman include>
 ```
 
 ## Usage:
@@ -62,21 +74,29 @@ Although the first one will be significantly faster on large datasets, as it use
 ./fast applybpe test.en.40000  test.en  codes vocab.en.40000
 ```
 
-## Python API
+## Python API (Windows)
 
-To install the Python API, simply run:
-```bash
-python setup.py install
-```
+To install the Python API, do:
+1. replace the `include_dirs` and `library_dirs` in `setup.py` with your path to mman-win32,
+or put them in your system include and library path.
 
-**Note:** For Mac OSX Users, add `export MACOSX_DEPLOYMENT_TARGET=10.x` (x=9 or 10, depending on your version) or `-stdlib=libc++` to the `extra_compile_args` of `setup.py` before/during the above install command, as appropriate.
+1. replace the vc runtime string "msvcr140" to "ucrtbase" in `<python root>\Lib\distutils\cygwinccompiler.py`
+
+2. ```bash
+   python setup.py build_ext --compiler mingw32
+   python setup.py install
+   ```
+
+**Note:** The fastBPE extension will depend on the `libstdc++.dll` of msys2/mingw-w64, which may have conflicts with 
+the lib in the conda environment. Make sure the python can find the correct version of `libstdc++.dll`, or a "DLL Load Failed" `ImportError` will be raised while importing fastBPE.  
 
 Call the API using:
 
 ```python
 import fastBPE
 
-bpe = fastBPE.fastBPE(codes_path, vocab_path)
+# bpe = fastBPE.fastBPE(codes_path, vocab_path)  # it's unable to read the vocab now
+bpe = fastBPE.fastBPE(codes_path, '')
 bpe.apply(["Roasted barramundi fish", "Centrally managed over a client-server architecture"])
 
 >> ['Ro@@ asted barr@@ am@@ un@@ di fish', 'Centr@@ ally managed over a cli@@ ent-@@ server architecture']

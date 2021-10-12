@@ -1,0 +1,4 @@
+/dist/
+/build/
+/fastBPE.egg-info/
+fastBPE/fastBPE.cpp

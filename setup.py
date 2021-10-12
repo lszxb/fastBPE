@@ -21,6 +21,9 @@ extensions = [
         'fastBPE',
         [ "fastBPE/fastBPE." + extension ],
         language='c++',
+        include_dirs=['C:/msys64/usr/local/include'],
+        library_dirs=['C:/msys64/usr/local/lib'],
+        libraries=['mman'],
         extra_compile_args=[
             "-std=c++11", "-Ofast", "-pthread"
         ],

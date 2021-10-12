@@ -81,7 +81,7 @@ void readText(const char *fp, unordered_map<string, uint32_t> &word_count) {
       deal_with_char(f[i]);
     }
   }
-  fprintf(stderr, "Read %lu words (%lu unique) from text file.\n", total,
+  fprintf(stderr, "Read %llu words (%llu unique) from text file.\n", total,
           word_count.size());
 }
 
@@ -135,7 +135,7 @@ void outputText(const char *fpo, const char *fp,
   size_t out_size = p.first;
 
   if (ftruncate(fdOut, out_size) < 0) {
-    fprintf(stderr, "Couldn't truncate output file %s to size %lu\n", fpo,
+    fprintf(stderr, "Couldn't truncate output file %s to size %llu\n", fpo,
             out_size);
     exit(EXIT_FAILURE);
   }
@@ -147,7 +147,7 @@ void outputText(const char *fpo, const char *fp,
     exit(EXIT_FAILURE);
   }
   p = output_or_count(bpe, size, f, fo);
-  fprintf(stderr, "Modified %lu words from text file.\n", p.second);
+  fprintf(stderr, "Modified %llu words from text file.\n", p.second);
   munmap(fo, out_size);
   munmap(f, size);
   close(fdOut);
@@ -436,7 +436,7 @@ void readVocab(const char *fp, unordered_map<string, uint32_t> &vocab) {
     vocab[splits[0]] = count;
     total += count;
   }
-  fprintf(stderr, "Read %lu words (%lu unique) from vocabulary file.\n", total,
+  fprintf(stderr, "Read %llu words (%llu unique) from vocabulary file.\n", total,
           vocab.size());
 }
 
@@ -450,9 +450,10 @@ void readCodes(const char *fp, unordered_map<tps, uint32_t, pair_hash> &codes,
   fprintf(stderr, "Loading codes from %s ...\n", fp);
   string line;
   while (getline(file, line)) {
+    if (line[0] == '#') continue;
     vector<string> splits;
     split(splits, line, ' ');
-    assert(splits.size() == 3);
+    assert(splits.size() == 2);
     auto pair = make_pair(splits[0], splits[1]);
     string concat = splits[0] + splits[1];
     assert(codes.find(pair) == codes.end());
@@ -460,7 +461,7 @@ void readCodes(const char *fp, unordered_map<tps, uint32_t, pair_hash> &codes,
     codes[pair] = codes.size();
     reversed_codes[concat] = pair;
   }
-  fprintf(stderr, "Read %lu codes from the codes file.\n", codes.size());
+  fprintf(stderr, "Read %llu codes from the codes file.\n", codes.size());
 }
 
 void decompose(const string s, vector<string> &newSubwords,
